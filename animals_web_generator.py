@@ -1,4 +1,3 @@
-# File: animals_web_generator.py
 import data_fetcher
 
 def generate_animal_cards(data):
@@ -8,10 +7,19 @@ def generate_animal_cards(data):
 
     cards_html = ""
     for animal in data:
-        type_field = f"<strong>Type:</strong> {animal['taxonomy'].get('type', 'N/A')}<br>"
+        # Conditionally render the "Type" field only if it's valid
+        type_field = ""
+        if animal['taxonomy'].get('type') and animal['taxonomy']['type'] not in ["N/A", "Unknown", ""]:
+            type_field = f"<strong>Type:</strong> {animal['taxonomy']['type']}<br>"
+
+        # Always render the "Diet" field
         diet_field = f"<strong>Diet:</strong> {animal['characteristics'].get('diet', 'N/A')}<br>"
+
+        # Render the "Locations" field
         locations = " and ".join(animal.get('locations', ['N/A']))
         location_field = f"<strong>Locations:</strong> {locations}"
+
+        # Add the card for the current animal
         cards_html += f"""
         <li class="cards__item">
             <div class="card__title">{animal['name']}</div>
